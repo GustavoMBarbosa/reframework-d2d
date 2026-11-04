@@ -50,7 +50,7 @@ D3D12Renderer::D3D12Renderer(IDXGISwapChain* swapchain_, ID3D12Device* device_, 
         throw std::runtime_error{"Failed to get swapchain description"};
     }
 
-    // Frame generation mods can raise the swapchain buffer count above 4 (e.g. 6).
+    // Frame generation mods can raise the swapchain buffer count above 4.
     // The RTV enum/array/heap hold BACKBUFFER_0..BACKBUFFER_7, so clamp to that.
     const int num_backbuffers = (std::min)((int)swapchain_desc.BufferCount, (int)RTV::D2D);
 
