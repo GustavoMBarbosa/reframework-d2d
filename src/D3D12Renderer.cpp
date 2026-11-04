@@ -7,6 +7,8 @@
 
 #include "D3D12Renderer.hpp"
 
+#include <algorithm>
+
 D3D12Renderer::D3D12Renderer(IDXGISwapChain* swapchain_, ID3D12Device* device_, ID3D12CommandQueue* cmd_queue_)
     : m_swapchain{(IDXGISwapChain3*)swapchain_}
     , m_device{device_}
@@ -48,7 +50,11 @@ D3D12Renderer::D3D12Renderer(IDXGISwapChain* swapchain_, ID3D12Device* device_, 
         throw std::runtime_error{"Failed to get swapchain description"};
     }
 
-    for (int i = 0; i < swapchain_desc.BufferCount; i++) {
+    // Frame generation mods can raise the swapchain buffer count above 4 (e.g. 6).
+    // The RTV enum/array/heap hold BACKBUFFER_0..BACKBUFFER_7, so clamp to that.
+    const int num_backbuffers = (std::min)((int)swapchain_desc.BufferCount, (int)RTV::D2D);
+
+    for (int i = 0; i < num_backbuffers; i++) {
         // Create a command context for each back buffer.
         // We create one for each because the GPU could be doing work on one while we're recording commands on another,
         // before we submit them to the command queue. If we did not do this, we would run into some race conditions.

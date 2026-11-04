@@ -19,6 +19,10 @@ public:
         BACKBUFFER_1,
         BACKBUFFER_2,
         BACKBUFFER_3,
+        BACKBUFFER_4,
+        BACKBUFFER_5,
+        BACKBUFFER_6,
+        BACKBUFFER_7,
         D2D,
         COUNT,
     };
